@@ -20,9 +20,28 @@ Samples audios (in Korean) can be found [here](http://carpedm20.github.io/tacotr
 
 ## Usage
 
+### 0. Prerequisites
+
+#### 0-1. Update pip and setuptools 
+```
+pip3 install --upgrade pip 
+pip3 install --upgrade setuptools
+```
+#### 0-2. Install font and build
+
+After installing font at `./untils/NanumGothic.ttf`, run below code in `./utils/plot.py` once:
+```
+matplotlib.font_manager._rebuild()
+```
+
+#### 0-3. Install ffmpeg
+```
+sudo apt-get install ffmpeg
+```
+
 ### 1. Install prerequisites
 
-After preparing [Tensorflow](https://www.tensorflow.org/install/), install prerequisites with:
+After preparing [Tensorflow](https://www.tensorflow.org/install/)(or uncomment tensorflow in `requiremenet.txt`), install prerequisites with:
 
     pip3 install -r requirements.txt
     python -c "import nltk; nltk.download('punkt')"
@@ -35,7 +54,7 @@ If you want to synthesize a speech in Korean dicrectly, follow [2-3. Download pr
 The `datasets` directory should look like:
 
     datasets
-    ├── son
+    ├── jtbc
     │   ├── alignment.json
     │   └── audio
     │       ├── 1.mp3
@@ -65,7 +84,7 @@ After you prepare as described, you should genearte preprocessed data with:
 
 ### 2-2. Generate Korean datasets
 
-Follow below commands. (explain with `son` dataset)
+Follow below commands. (explain with `jtbc` dataset)
 
 0. To automate an alignment between sounds and texts, prepare `GOOGLE_APPLICATION_CREDENTIALS` to use [Google Speech Recognition API](https://cloud.google.com/speech/). To get credentials, read [this](https://developers.google.com/identity/protocols/application-default-credentials).
 
@@ -114,17 +133,17 @@ The important hyperparameters for a models are defined in `hparams.py`.
 
 To train a single-speaker model:
 
-    python3 train.py --data_path=datasets/son
-    python3 train.py --data_path=datasets/son --initialize_path=PATH_TO_CHECKPOINT
+    python3 train.py --data_path=datasets/jtbc
+    python3 train.py --data_path=datasets/jtbc --initialize_path=PATH_TO_CHECKPOINT
 
 To train a multi-speaker model:
 
     # after change `model_type` in `hparams.py` to `deepvoice` or `simple`
     python3 train.py --data_path=datasets/son1,datasets/son2
 
-To restart a training from previous experiments such as `logs/son-20171015`:
+To restart a training from previous experiments such as `logs/jtbc_2018-05-12_08-35-14`:
 
-    python3 train.py --data_path=datasets/son --load_path logs/son-20171015
+    python3 train.py --data_path=datasets/jtbc --load_path logs/jtbc_2018-05-12_08-35-14
 
 If you don't have good and enough (10+ hours) dataset, it would be better to use `--initialize_path` to use a well-trained model as initial parameters.
 
@@ -133,11 +152,11 @@ If you don't have good and enough (10+ hours) dataset, it would be better to use
 
 You can train your own models with:
 
-    python3 app.py --load_path logs/son-20171015 --num_speakers=1
+    python3 app.py --load_path logs/jtbc_2018-05-12_08-35-14 --num_speakers=1
 
 or generate audio directly with:
 
-    python3 synthesizer.py --load_path logs/son-20171015 --text "이거 실화냐?"
+    python3 synthesizer.py --load_path logs/jtbc_2018-05-12_08-35-14 --text "이거 실화냐?"
 	
 ### 4-1. Synthesizing non-korean(english) audio
 

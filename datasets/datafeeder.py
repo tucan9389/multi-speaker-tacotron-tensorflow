@@ -47,7 +47,7 @@ def get_path_dict(
             new_items = [(path, n) for path, n, n_tokens in items \
                     if min_n_frame <= n <= max_n_frame and n_tokens >= hparams.min_tokens]
 
-            if any(check in data_dir for check in ["son", "yuinna"]):
+            if any(check in data_dir for check in ["jtbc", "yuinna"]):
                 blacklists = [".0000.", ".0001.", "NB11479580.0001"]
                 new_items = [item for item in new_items \
                         if any(check not in item[0] for check in blacklists)]
